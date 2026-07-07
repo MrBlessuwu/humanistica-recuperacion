@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulador de Examen</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+background:#f4f6fb;
+display:flex;
+justify-content:center;
+padding:40px;
+
+}
+
+#contenedor{
+
+background:white;
+width:900px;
+max-width:95%;
+padding:35px;
+border-radius:18px;
+box-shadow:0px 10px 30px rgba(0,0,0,.15);
+
+}
+
+h1{
+
+text-align:center;
+margin-bottom:25px;
+
+}
+
+#barra{
+
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+font-size:18px;
+font-weight:bold;
+
+}
+
+#pregunta{
+
+font-size:24px;
+margin-bottom:25px;
+min-height:100px;
+
+}
+
+.opcion{
+
+display:block;
+
+width:100%;
+
+padding:15px;
+
+margin-bottom:12px;
+
+border:none;
+
+background:#eceff7;
+
+cursor:pointer;
+
+border-radius:10px;
+
+font-size:17px;
+
+transition:.2s;
+
+text-align:left;
+
+}
+
+.opcion:hover{
+
+background:#d9e6ff;
+
+}
+
+.seleccionada{
+
+background:#3b82f6!important;
+
+color:white;
+
+}
+
+#siguiente{
+
+margin-top:20px;
+
+padding:14px 30px;
+
+font-size:18px;
+
+border:none;
+
+background:#2563eb;
+
+color:white;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+
+#siguiente:hover{
+
+background:#1d4ed8;
+
+}
+
+#resultado{
+
+display:none;
+
+text-align:center;
+
+}
+
+#resultado h2{
+
+margin-bottom:20px;
+
+}
+
+#reiniciar{
+
+margin-top:20px;
+
+padding:15px 30px;
+
+font-size:18px;
+
+border:none;
+
+background:#16a34a;
+
+color:white;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="contenedor">
+
+<h1>Simulador de Examen</h1>
+
+<div id="barra">
+
+<div id="contador"></div>
+
+<div id="tiempo">30:00</div>
+
+</div>
+
+<div id="examen">
+
+<div id="pregunta"></div>
+
+<div id="opciones"></div>
+
+<button id="siguiente">Siguiente</button>
+
+</div>
+
+<div id="resultado">
+
+<h2>Resultado Final</h2>
+
+<p id="correctas"></p>
+
+<p id="incorrectas"></p>
+
+<p id="porcentaje"></p>
+
+<p id="tiempoFinal"></p>
+
+<button id="reiniciar">
+
+Reiniciar examen
+
+</button>
+
+</div>
+
+</div>
+
+<script src="preguntas-usac.js"></script>
+
+<script src="preguntas-ia.js"></script>
+
+<script>
+
+const poolCompleto=[...bancoUsac,...bancoIA];
+
+function mezclar(array){
+
+for(let i=array.length-1;i>0;i--){
+
+const j=Math.floor(Math.random()*(i+1));
+
+[array[i],array[j]]=[array[j],array[i]];
+
+}
+
+return array;
+
+}
+
+let preguntas=mezclar([...poolCompleto]).slice(0,58);
+
+let indice=0;
+
+let respuestasCorrectas=0;
+
+let respuestaElegida=null;
+
+let tiempo=1800;
+
+const tiempoInicial=1800;
+
+preguntas.forEach(p=>{
+
+const correctaTexto=p.opciones[p.correcta];
+
+mezclar(p.opciones);
+
+p.correcta=p.opciones.indexOf(correctaTexto);
+
+});
+
+function mostrarPregunta(){
+
+document.getElementById("contador").innerHTML=
+
+"Pregunta "+(indice+1)+" / 58";
+
+document.getElementById("pregunta").innerHTML=
+
+preguntas[indice].pregunta;
+
+const cont=document.getElementById("opciones");
+
+cont.innerHTML="";
+
+respuestaElegida=null;
+
+preguntas[indice].opciones.forEach((op,i)=>{
+
+const b=document.createElement("button");
+
+b.className="opcion";
+
+b.innerHTML=op;
+
+b.onclick=()=>{
+
+document.querySelectorAll(".opcion").forEach(x=>x.classList.remove("seleccionada"));
+
+b.classList.add("seleccionada");
+
+respuestaElegida=i;
+
+};
+
+cont.appendChild(b);
+
+});
+
+}
+
+mostrarPregunta();
+
+document.getElementById("siguiente").onclick=function(){
+
+if(respuestaElegida===null){
+
+alert("Selecciona una respuesta.");
+
+return;
+
+}
+
+if(respuestaElegida===preguntas[indice].correcta)
+
+respuestasCorrectas++;
+
+indice++;
+
+if(indice>=58){
+
+finalizar();
+
+return;
+
+}
+
+mostrarPregunta();
+
+};
+
+const reloj=setInterval(()=>{
+
+tiempo--;
+
+const m=Math.floor(tiempo/60);
+
+const s=tiempo%60;
+
+document.getElementById("tiempo").innerHTML=
+
+String(m).padStart(2,"0")+":"+
+
+String(s).padStart(2,"0");
+
+if(tiempo<=0){
+
+clearInterval(reloj);
+
+finalizar();
+
+}
+
+},1000);
+
+function finalizar(){
+
+clearInterval(reloj);
+
+document.getElementById("examen").style.display="none";
+
+document.getElementById("resultado").style.display="block";
+
+const incorrectas=58-respuestasCorrectas;
+
+const porcentaje=((respuestasCorrectas/58)*100).toFixed(2);
+
+const usado=tiempoInicial-tiempo;
+
+const m=Math.floor(usado/60);
+
+const s=usado%60;
+
+document.getElementById("correctas").innerHTML=
+
+"Correctas: "+respuestasCorrectas;
+
+document.getElementById("incorrectas").innerHTML=
+
+"Incorrectas: "+incorrectas;
+
+document.getElementById("porcentaje").innerHTML=
+
+"Porcentaje: "+porcentaje+"%";
+
+document.getElementById("tiempoFinal").innerHTML=
+
+"Tiempo utilizado: "+m+" min "+s+" seg";
+
+}
+
+document.getElementById("reiniciar").onclick=()=>{
+
+location.reload();
+
+};
+
+</script>
+
+</body>
+
+</html>
