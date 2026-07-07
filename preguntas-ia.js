@@ -385,60 +385,6 @@ const bancoIA = [
     correcta: 2
 },
 
-{
-    pregunta: "¿Cuál era la hipótesis del autor respecto al desarrollo urbano antes de la sexta década del siglo XIX?",
-    opciones: [
-        "Las ciudades crecían más rápido que el campo.",
-        "Predominaba el campo sobre la ciudad.",
-        "Existía equilibrio entre ciudad y campo.",
-        "Guatemala ya poseía una red urbana moderna."
-    ],
-    correcta: 1
-},
-
-{
-    pregunta: "¿Cuál era uno de los principales objetivos de la infraestructura desarrollada durante la expansión cafetalera?",
-    opciones: [
-        "Integrar los mercados campesinos.",
-        "Favorecer el comercio artesanal.",
-        "Facilitar el transporte del café hacia los puertos de exportación.",
-        "Unir todas las cabeceras departamentales."
-    ],
-    correcta: 2
-},
-
-{
-    pregunta: "Según el autor, ¿por qué el desarrollo de la infraestructura no significó necesariamente la creación de un mercado interno?",
-    opciones: [
-        "Porque los caminos nunca fueron terminados.",
-        "Porque estaba orientada casi exclusivamente al servicio de la economía cafetalera.",
-        "Porque únicamente existían carreteras de tierra.",
-        "Porque el Estado prohibía el comercio interno."
-    ],
-    correcta: 1
-},
-
-{
-    pregunta: "¿Qué ciudades menciona el texto como las principales que experimentaron crecimiento durante el auge cafetalero?",
-    opciones: [
-        "Escuintla, Zacapa y Huehuetenango.",
-        "Chiquimula, Retalhuleu y Antigua.",
-        "Quetzaltenango, Alta Verapaz y Guatemala.",
-        "Cobán, Mazatenango y Jalapa."
-    ],
-    correcta: 2
-},
-
-{
-    pregunta: "Según Edeliberto Cifuentes, el llamado 'espejismo del mercado interno' consistía en:",
-    opciones: [
-        "La abundancia de industrias nacionales.",
-        "El desarrollo equilibrado entre agricultura e industria.",
-        "La falsa impresión de que existía un verdadero mercado interno debido al desarrollo de infraestructura destinada principalmente a la exportación cafetalera.",
-        "La eliminación de la dependencia del mercado mundial."
-    ],
-    correcta: 2
-}
 
 ];
   
